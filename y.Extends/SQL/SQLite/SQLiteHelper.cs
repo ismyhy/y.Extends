@@ -17,5 +17,7 @@ namespace y.Extends.SQL.SQLite
             DllLoader.Loader();
             new InitializeConfig().Initialize();
         }
+
+
     }
 }

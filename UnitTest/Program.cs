@@ -1,7 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
 
+using y.Extends.SQL;
 using y.Extends.SQL.SQLite;
 using y.Extends.SQL.SQLite.Attrbutes;
 
@@ -13,46 +16,49 @@ namespace UnitTest
         {
             SQLiteHelper.Initialize();
 
-            using (var ere = new ere())
+            using (var ere = new Ere())
             {
-                ere.t44t1s.Add(new t44t1()
+                ere.T44t1s.Add(new T44t1
                 {
-                    Organization="4343",
+                    Organization = "4343",
+                    DatetimeLastUpdate = DateTime.Now.ToLongDateString()
                 });
                 ere.SaveChanges();
+
+                var ll = ere.T44t1s.ToList();
             }
-
-
         }
     }
 
-    public class t44t1  
+    [Table("testTable")]
+    public class T44t1 : EntityBase
     {
+        [MaxLength(100)]
         public string DatetimeLastUpdate { get; set; }
 
         [Autoincrement]
         [Key]
+        [NotNull] 
         public int Id { get; set; }
 
         [NotNull]
+        [Column] 
         public bool IsDeleted { get; set; }
 
-        [IgnoreColumn]
+        [Ignore]
         public string Name { get; set; }
 
+        [MaxLength(100)]
         public string Organization { get; set; }
     }
 
-
-    public class ere : SQLiteDatabase<ere>
+    public class Ere : SQLiteDatabase <Ere>
     {
-        public DbSet <t44t1> t44t1s { get; set; }
+        public DbSet <T44t1> T44t1s { get; set; }
 
         public override void ExcuteInitialize()
         {
             WaitExcuteInitialize();
         }
     }
-
-
 }

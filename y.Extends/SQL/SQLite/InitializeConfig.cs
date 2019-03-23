@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -7,8 +8,6 @@ namespace y.Extends.SQL.SQLite
 {
     internal class InitializeConfig
     {
-
-
         public void Initialize()
         {
             var x = new XmlDocument();
@@ -84,7 +83,7 @@ namespace y.Extends.SQL.SQLite
 
             if (list.Count > 0)
             {
-                var exi = list.FirstOrDefault(i => InitConfigHelper.FindNode(i.ChildNodes, "assemblyIdentity").Exists(j => j.Attributes.ToList().Exists(iq => iq.InnerText == "System.Data.SQLite.EF6")));
+                var exi = list.FirstOrDefault(i => i.ChildNodes.FindNode("assemblyIdentity").Exists(j => j.Attributes.ToList().Exists(iq => iq.InnerText == "System.Data.SQLite.EF6")));
 
                 var exi2 = list.FirstOrDefault(i => i.ChildNodes.FindNode("assemblyIdentity").Exists(j => j.Attributes.ToList().Exists(iq => iq.InnerText == "System.Data.SQLite")));
 
@@ -189,7 +188,7 @@ namespace y.Extends.SQL.SQLite
 
         private XmlNode AddNode(XmlDocument x, XmlNode parent, string nodeName, IDictionary <string, string> keyValue, bool isNeed = false)
         {
-            XmlNode node = null;
+            XmlNode node;
 
             if (keyValue.Count > 0)
             {
@@ -212,7 +211,7 @@ namespace y.Extends.SQL.SQLite
                 eleChild.SetAttribute(kv.Key, kv.Value);
             }
 
-            parent?.AppendChild(eleChild);
+            parent.AppendChild(eleChild);
             return eleChild;
         }
 
@@ -226,7 +225,7 @@ namespace y.Extends.SQL.SQLite
                 var ll = new List <XmlNode>();
                 if (child?.ChildNodes != null)
                 {
-                    foreach (XmlNode nodes in child?.ChildNodes)
+                    foreach (XmlNode nodes in child.ChildNodes)
                     {
                         child.RemoveChild(nodes);
                         ll.Add(nodes);
@@ -247,7 +246,7 @@ namespace y.Extends.SQL.SQLite
             XmlElement ele = null;
             if (node != null)
             {
-                var list = node?.ChildNodes;
+                var list = node.ChildNodes;
                 if (list.ExistAttributes("name", "entityFramework"))
                 {
                     flag = false;
@@ -270,7 +269,7 @@ namespace y.Extends.SQL.SQLite
             AddNode(x, ele, "section", keyValue);
         }
 
-        private void NodeSelector(XmlNodeList nodeList, string targetNodeName, Func <XmlNode> addAction, out XmlNode xmlNode)
+        private void NodeSelector(IEnumerable nodeList, string targetNodeName, Func <XmlNode> addAction, out XmlNode xmlNode)
         {
             xmlNode = null;
             if (nodeList == null)
@@ -280,11 +279,13 @@ namespace y.Extends.SQL.SQLite
 
             foreach (XmlNode xmlNode2 in nodeList)
             {
-                if (xmlNode2.Name == targetNodeName)
+                if (xmlNode2.Name != targetNodeName)
                 {
-                    xmlNode = xmlNode2;
-                    return;
+                    continue;
                 }
+
+                xmlNode = xmlNode2;
+                return;
             }
 
             xmlNode = addAction?.Invoke();
@@ -310,18 +311,20 @@ namespace y.Extends.SQL.SQLite
                     continue;
                 }
 
-                foreach (XmlAttribute attr in item?.Attributes)
+                foreach (XmlAttribute attr in item.Attributes)
                 {
-                    if (Equals(attr.Name, key))
+                    if (! Equals(attr.Name, key))
                     {
-                        if (Equals(value, ""))
-                        {
-                            return true;
-                        }
-                        if (attr.InnerText == value)
-                        {
-                            return true;
-                        }
+                        continue;
+                    }
+
+                    if (Equals(value, ""))
+                    {
+                        return true;
+                    }
+                    if (attr.InnerText == value)
+                    {
+                        return true;
                     }
                 }
             }
@@ -339,26 +342,28 @@ namespace y.Extends.SQL.SQLite
             var ll = new List <XmlNode>();
             foreach (XmlNode variable in list)
             {
-                if (variable.Name == nodeName)
+                if (variable.Name != nodeName)
                 {
-                    if (! string.IsNullOrWhiteSpace(oneKey) && ! string.IsNullOrWhiteSpace(oneValue))
+                    continue;
+                }
+
+                if (! string.IsNullOrWhiteSpace(oneKey) && ! string.IsNullOrWhiteSpace(oneValue))
+                {
+                    if (variable.Attributes != null)
                     {
-                        if (variable.Attributes != null)
+                        var flag = variable.Attributes.ToList().Exists(i => Equals(i.Name, oneKey) && Equals(i.InnerText, oneValue));
+
+                        if (flag)
                         {
-                            var flag = variable.Attributes.ToList().Exists(i => Equals(i.Name, oneKey) && Equals(i.InnerText, oneValue));
-
-                            if (flag)
-                            {
-                                ll.Add(variable);
-                                return ll;
-                            }
+                            ll.Add(variable);
+                            return ll;
                         }
-
-                        continue;
                     }
 
-                    ll.Add(variable);
+                    continue;
                 }
+
+                ll.Add(variable);
             }
 
             return ll.Count > 0 ? ll : null;
@@ -366,34 +371,13 @@ namespace y.Extends.SQL.SQLite
 
         public static List <XmlNode> ToList(this XmlNodeList list)
         {
-            var nn = new List <XmlNode>();
-            if (list == null)
-            {
-                return nn;
-            }
-
-            foreach (XmlNode variable in list)
-            {
-                nn.Add(variable);
-            }
-
-            return nn;
+            return list?.Cast <XmlNode>().ToList() ?? new List <XmlNode>();
         }
 
         public static List <XmlAttribute> ToList(this XmlAttributeCollection collection)
         {
-            var nn = new List <XmlAttribute>();
-            if (collection == null)
-            {
-                return nn;
-            }
-
-            foreach (XmlAttribute variable in collection)
-            {
-                nn.Add(variable);
-            }
-
-            return nn;
+            //var nn = new List <XmlAttribute>();
+            return collection?.Cast <XmlAttribute>().ToList() ?? new List <XmlAttribute>();
         }
     }
 }
