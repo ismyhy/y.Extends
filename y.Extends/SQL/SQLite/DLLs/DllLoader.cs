@@ -14,29 +14,29 @@ namespace y.Extends.SQL.SQLite.DLLs
         internal static void Loader()
         {
             var list = LoaderStram();
-            foreach (var dll in list)
-            {
-                try
-                {
-                    LoadLibrary(dll);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
+            //foreach (var dll in list)
+            //{
+            //    try
+            //    {
+            //        LoadLibrary(dll);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e);
+            //    }
+            //}
         }
 
         private static List <string> LoaderStram()
         {
             var assembly = Assembly.GetExecutingAssembly();
             var list = assembly.GetManifestResourceNames().Where(i => i.ToLower().Contains("sqlite")).ToList();
-            var dir = Path.Combine(Path.GetTempPath(), "y.Extends.DllLoader");
-            if (! Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
+            //var dir = Path.Combine(Path.GetTempPath(), "y.Extends.DllLoader");
+            //if (! Directory.Exists(dir))
+            //{
+            //    Directory.CreateDirectory(dir);
+            //}
+            var dir = Environment.CurrentDirectory;
             var listString = new List <string>();
 
             foreach (var filePath in list)

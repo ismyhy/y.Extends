@@ -49,8 +49,30 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>.\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>.\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite.CodeFirst">
+      <HintPath>.\SQLite.CodeFirst.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>.\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6">
+      <HintPath>.\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6.Migrations">
+      <HintPath>.\System.Data.SQLite.EF6.Migrations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>.\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +83,11 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQL\EntityBase.cs" />
+    <Compile Include="SQL\SQLite\Attrbutes\AutoincrementAttribute.cs" />
+    <Compile Include="SQL\SQLite\Attrbutes\IgnoreColumnAttribute.cs" />
+    <Compile Include="SQL\SQLite\Attrbutes\NotNullAttribute.cs" />
+    <Compile Include="SQL\SQLite\Attrbutes\ForeignColumnKeyAttribute.cs" />
     <Compile Include="SQL\SQLite\DLLs\DllLoader.cs" />
     <Compile Include="SQL\SQLite\InitializeConfig.cs" />
     <Compile Include="SQL\SQLite\SQLiteDatabase.cs" />
@@ -70,6 +97,7 @@
     <EmbeddedResource Include="SQL\SQLite\DLLs\EntityFramework.dll" />
     <EmbeddedResource Include="SQL\SQLite\DLLs\EntityFramework.SqlServer.dll" />
     <EmbeddedResource Include="SQL\SQLite\DLLs\SQLite.CodeFirst.dll" />
+    <EmbeddedResource Include="SQL\SQLite\DLLs\SQLite.Interop.dll" />
     <EmbeddedResource Include="SQL\SQLite\DLLs\System.Data.SQLite.dll" />
     <EmbeddedResource Include="SQL\SQLite\DLLs\System.Data.SQLite.EF6.dll" />
     <EmbeddedResource Include="SQL\SQLite\DLLs\System.Data.SQLite.EF6.Migrations.dll" />
