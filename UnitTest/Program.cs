@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -20,12 +21,37 @@ namespace UnitTest
             {
                 ere.T44t1s.Add(new T44t1
                 {
-                    Organization = "4343",
-                    DatetimeLastUpdate = DateTime.Now.ToLongDateString()
+                    Organization = "22243",
+                    DatetimeLastUpdate = DateTime.Now.ToLongDateString(),
+                    TestListClass = new TestListClass
+                    {
+                        Organization = "444444",
+                        DatetimeLastUpdate = DateTime.Now.ToLongDateString()
+                    },
+                    T44t2List = new List <TestListClass2>
+                    {
+                        new TestListClass2
+                        {
+                            Organization = "55555",
+                            DatetimeLastUpdate = DateTime.Now.Ticks.ToString()
+                        },
+
+                        new TestListClass2
+                        {
+                            Organization = "6666",
+                            DatetimeLastUpdate = DateTime.Now.Ticks.ToString()
+                        },
+                        new TestListClass2
+                        {
+                            Organization = "777",
+                            DatetimeLastUpdate = DateTime.Now.Ticks.ToString()
+                        }
+                    }
                 });
                 ere.SaveChanges();
 
                 var ll = ere.T44t1s.ToList();
+                var t2 = ll.Last().TestListClass;
             }
         }
     }
@@ -38,11 +64,11 @@ namespace UnitTest
 
         [Autoincrement]
         [Key]
-        [NotNull] 
+        [NotNull]
         public int Id { get; set; }
 
         [NotNull]
-        [Column] 
+        [Column]
         public bool IsDeleted { get; set; }
 
         [Ignore]
@@ -50,7 +76,78 @@ namespace UnitTest
 
         [MaxLength(100)]
         public string Organization { get; set; }
+
+        public int T44t2Id { get; set; }
+
+        [ForeignKey("T44t2Id")]
+        public virtual TestListClass TestListClass { get; set; }
+
+        //[Ignore]
+        [ForeignKey("T44t1Id")]
+        public virtual ICollection <TestListClass2> T44t2List { get; set; }
     }
+
+    [Table("testTable2")]
+    public class TestListClass : EntityBase
+    {
+        //[ForeignKey("T44t1")]
+        //public int T44t1Id { get; set; }
+        //[ForeignKey("T44t1Id")]
+        //public virtual T44t1 T44t1 { get; set; }
+
+        [MaxLength(100)]
+        public string DatetimeLastUpdate { get; set; }
+
+        [Autoincrement]
+        [Key]
+        [NotNull]
+        public int T44t2Id { get; set; }
+
+        [NotNull]
+        [Column]
+        public bool IsDeleted { get; set; }
+
+        [Ignore]
+        public string Name { get; set; }
+
+        [MaxLength(100)]
+        public string Organization { get; set; }
+
+        //public int Id100 { get; set; }
+        
+    }
+
+
+    [Table("testTable3")]
+    public class TestListClass2 : EntityBase
+    {
+        [ForeignKey("T44t1")]
+        public int T44t1Id { get; set; }
+        [ForeignKey("T44t1Id")]
+        public virtual T44t1 T44t1 { get; set; }
+
+        [MaxLength(100)]
+        public string DatetimeLastUpdate { get; set; }
+
+        [Autoincrement]
+        [Key]
+        [NotNull]
+        public int T44t2Id { get; set; }
+
+        [NotNull]
+        [Column]
+        public bool IsDeleted { get; set; }
+
+        [Ignore]
+        public string Name { get; set; }
+
+        [MaxLength(100)]
+        public string Organization { get; set; }
+
+        //public int Id100 { get; set; }
+
+    }
+
 
     public class Ere : SQLiteDatabase <Ere>
     {

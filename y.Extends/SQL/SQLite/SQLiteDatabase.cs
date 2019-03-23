@@ -1,11 +1,12 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite.EF6.Migrations;
 
 namespace y.Extends.SQL.SQLite
 {
-    public abstract class SQLiteDatabase <T> :   DbContext, ISQLiteHelper where T : DbContext
+    public abstract class SQLiteDatabase <T> :   DbContext where T : DbContext
     {
         private DbModelBuilder _modelBuilder;
 
@@ -24,7 +25,8 @@ namespace y.Extends.SQL.SQLite
         }
 
         /// <summary>
-        /// 方法实现之后需要执行 <see cref="WaitExcuteInitialize"/> 方法 来初始化数据
+        /// 方法实现之后需要执行 WaitExcuteInitialize() 方法来初始化数据
+        /// <see cref="WaitExcuteInitialize"/> 
         /// </summary>
         public abstract void ExcuteInitialize();
 

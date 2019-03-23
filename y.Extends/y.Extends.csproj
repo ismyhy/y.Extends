@@ -89,7 +89,6 @@
     <Compile Include="SQL\SQLite\Attrbutes\NotNullAttribute.cs" />
     <Compile Include="SQL\SQLite\DLLs\DllLoader.cs" />
     <Compile Include="SQL\SQLite\InitializeConfig.cs" />
-    <Compile Include="SQL\SQLite\ISQLiteHelper.cs" />
     <Compile Include="SQL\SQLite\SQLiteDatabase.cs" />
     <Compile Include="SQL\SQLite\SQLiteHelper.cs" />
   </ItemGroup>
