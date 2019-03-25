@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Xml;
 
 namespace y.Extends.SQL.SQLite
@@ -9,6 +11,28 @@ namespace y.Extends.SQL.SQLite
     internal class InitializeConfig
     {
         public void Initialize()
+        {
+            ModifyXmlConfig();
+        }
+
+        private void ModifyXmlConfig2()
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            var sb = new StringBuilder();
+
+            foreach (ConfigurationSection section in config.Sections)
+            {
+                var s = section.SectionInformation;
+                sb.Append(s.Name + "==>" + s.SectionName).AppendLine();
+            }
+
+            Console.WriteLine(sb);
+        }
+
+        #region ModifyXmlConfig
+
+        private void ModifyXmlConfig()
         {
             var x = new XmlDocument();
             var path = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -293,6 +317,8 @@ namespace y.Extends.SQL.SQLite
             //return false;
             //return nodeList.Cast < XmlNode > ( ).Any ( parent => parent.Name == targetNodeName );
         }
+
+        #endregion
     }
 
     internal static class InitConfigHelper

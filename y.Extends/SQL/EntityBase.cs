@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -7,48 +6,72 @@ using System.Runtime.CompilerServices;
 
 namespace y.Extends.SQL
 {
-    public abstract class EntityBase : ICloneable, INotifyPropertyChanged
+    public abstract class EntityBase
     {
-        public object Clone()
+        public abstract object Clone();
+    }
+
+    public abstract class EntityBase <T> : EntityBase, INotifyPropertyChanged where T : new()
+    {
+        /// <summary>
+        ///     浅复制
+        /// </summary>
+        public override object Clone()
         {
             return MemberwiseClone();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void CopyTo <T>(T target) where T : EntityBase, new()
+        /// <summary>
+        ///     深复制过程
+        /// </summary>
+        public void CopyTo(T target)
         {
             var oldPropertyInfos = GetType().GetProperties();
             var propertyInfos = typeof (T).GetProperties();
 
+            //所有的属性信息
             var list = propertyInfos.Intersect(oldPropertyInfos, new PropertyInfoComparer()).ToList();
 
-            foreach (var property in list)
-            {
-                var value = property.GetValue(this, null); 
-                property.SetValue(target, value);
-            }
-             
-        }
+            //继承 EntityBase 的属性信息
+            //var baseList = list.Where(p => p.PropertyType.IsSubclassOf(typeof (EntityBase))).ToList();
 
-        public T Copy <T>() where T : EntityBase, new()
-        {
-            var oldPropertyInfos = GetType().GetProperties();
-            var propertyInfos = typeof (T).GetProperties();
-            var target = new T();
-            var list = propertyInfos.Intersect(oldPropertyInfos, new PropertyInfoComparer()).ToList();
+            //所有不继承 EntityBase 的属性信息
+            //var notbaseList = list.Except(baseList).ToList();
 
+            //所有不继承 EntityBase 的，但继承 IEnumerable 的属性信息
+            //var baseList2 = list.Where(i=>i.PropertyType!=typeof(string)).Where(p => p.PropertyType.GetInterface("IEnumerable",true)==typeof(IEnumerable)).ToList();
+
+            //所有不继承 EntityBase 的，也不继承 IEnumerable 的属性信息
+            //notbaseList = notbaseList.Except(baseList2).ToList();
+              
             foreach (var property in list)
             {
                 var value = property.GetValue(this, null);
+                if (value.GetType().IsSubclassOf(typeof (EntityBase)))
+                {
+                    value = ((EntityBase) value).Clone();
+                }
                 property.SetValue(target, value);
-            }
-            return target;
+            }   
+
+            //foreach (var property in baseList)
+            //{     
+            //    var bBase = (EntityBase) property.GetValue(this, null);
+
+            //    property.SetValue(target, bBase.Clone());
+            //}
+
+            //return target;
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        /// <summary>
+        ///     深复制过程
+        /// </summary>
+        public T Copy()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var target = new T();
+            CopyTo(target);
+            return target;
         }
 
         private class PropertyInfoComparer : IEqualityComparer <PropertyInfo>
@@ -63,5 +86,16 @@ namespace y.Extends.SQL
                 return obj.PropertyType.GetHashCode() ^ obj.Name.GetHashCode();
             }
         }
+
+        #region 通知
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 }

@@ -51,13 +51,17 @@ namespace UnitTest
                 ere.SaveChanges();
 
                 var ll = ere.T44t1s.ToList();
+                var t1 = new T44t1();
+
+                ll.First().CopyTo(t1);
+            var y11=    t1.T44t2List.ToList();
                 var t2 = ll.Last().TestListClass;
             }
         }
     }
 
     [Table("testTable")]
-    public class T44t1 : EntityBase
+    public class T44t1 : EntityBase<T44t1>
     {
         [MaxLength(100)]
         public string DatetimeLastUpdate { get; set; }
@@ -88,7 +92,7 @@ namespace UnitTest
     }
 
     [Table("testTable2")]
-    public class TestListClass : EntityBase
+    public class TestListClass : EntityBase<TestListClass>
     {
         //[ForeignKey("T44t1")]
         //public int T44t1Id { get; set; }
@@ -119,7 +123,7 @@ namespace UnitTest
 
 
     [Table("testTable3")]
-    public class TestListClass2 : EntityBase
+    public class TestListClass2 : EntityBase<TestListClass2>
     {
         [ForeignKey("T44t1")]
         public int T44t1Id { get; set; }

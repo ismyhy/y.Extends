@@ -55,11 +55,14 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>.\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SQLite.CodeFirst">
       <HintPath>.\SQLite.CodeFirst.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
       <HintPath>.\System.Data.SQLite.dll</HintPath>
@@ -73,12 +76,14 @@
     <Reference Include="System.Data.SQLite.Linq">
       <HintPath>.\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
@@ -91,6 +96,9 @@
     <Compile Include="SQL\SQLite\InitializeConfig.cs" />
     <Compile Include="SQL\SQLite\SQLiteDatabase.cs" />
     <Compile Include="SQL\SQLite\SQLiteHelper.cs" />
+    <Compile Include="WPF\Controls\AsyncControl.cs" />
+    <Compile Include="WPF\Extends\ImmersiveWindiw.cs" />
+    <Compile Include="WPF\InternalDefine\VisualWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SQL\SQLite\DLLs\EntityFramework.dll" />

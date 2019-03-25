@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "y.Extends", "y.Extends\y.Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{5C96FBBC-93BF-4638-857A-80AA5F0F135A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{5C96FBBC-93BF-4638-857A-80AA5F0F135A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C96FBBC-93BF-4638-857A-80AA5F0F135A}.Release|x64.ActiveCfg = Release|x64
 		{5C96FBBC-93BF-4638-857A-80AA5F0F135A}.Release|x64.Build.0 = Release|x64
+		{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}.Debug|x64.Build.0 = Debug|Any CPU
+		{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}.Release|x64.ActiveCfg = Release|Any CPU
+		{B95ED5E5-8AB5-4CD1-AEE2-471641BFE2E7}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

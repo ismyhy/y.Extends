@@ -1,17 +1,19 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite.EF6.Migrations;
+using System.Linq;
 
 namespace y.Extends.SQL.SQLite
 {
-    public abstract class SQLiteDatabase <T> :   DbContext where T : DbContext
+    public abstract class SQLiteDatabase <T> : DbContext where T : DbContext
     {
         private DbModelBuilder _modelBuilder;
 
-        protected SQLiteDatabase() : base("SQLiteConnectionString")
+        protected SQLiteDatabase(bool lazyLoading = true) : base("SQLiteConnectionString")
         {
+            Configuration.LazyLoadingEnabled = lazyLoading;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion <T, Configuration <T>>());
 
             //Database.SetInitializer<DbContext>(null);
@@ -25,8 +27,8 @@ namespace y.Extends.SQL.SQLite
         }
 
         /// <summary>
-        /// 方法实现之后需要执行 WaitExcuteInitialize() 方法来初始化数据
-        /// <see cref="WaitExcuteInitialize"/> 
+        ///     方法实现之后需要执行 WaitExcuteInitialize() 方法来初始化数据
+        ///     <see cref="WaitExcuteInitialize" />
         /// </summary>
         public abstract void ExcuteInitialize();
 
@@ -47,7 +49,23 @@ namespace y.Extends.SQL.SQLite
         {
             try
             {
-                return base.SaveChanges();
+                bool saveFailed;
+                var result = 0;
+                do
+                {
+                    saveFailed = false;
+                    try
+                    {
+                        result = base.SaveChanges();
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        saveFailed = true;
+                        ex.Entries.Single().Reload();
+                    }
+                } while (saveFailed);
+
+                return result;
             }
             finally
             {
